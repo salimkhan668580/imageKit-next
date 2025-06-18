@@ -3,7 +3,7 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface IVideo extends Document {
     title: string;
     description: string;
-    Videourl: string;
+    VideoUrl: string;
     thumbnail: string;
     createdAt: Date;
     updatedAt: Date;
@@ -26,13 +26,13 @@ const videoSchema = new Schema<IVideo>(
             type: String,
             required: true,
         },
-        Videourl: {
+        VideoUrl: {
             type: String,
             required: true,
         },
         thumbnail: {
             type: String,
-            required: true,
+            default:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-GwBWO82SDhf6q-IDxzTm06rATH45qELJyw&s"
         },
         transformation: {
             width:{

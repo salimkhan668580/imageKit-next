@@ -13,25 +13,25 @@ export const authOption:NextAuthOptions={
       password: { label: "Password", type: "password" }
     },
     async authorize(credentials) {
-        if(!credentials?.email || !credentials?.password){
-           throw new Error("email or password is missing")
-      
+      const { email, password } = credentials || {};
+         if (!email || !password) {
+          throw new Error("email or password is missing");
         }
         try {
               await dbConnect();
-        const user=await User.findOne({email:credentials.email})
+        const user=await User.findOne({email})
         if(!user){
             throw new Error("user not found")
-        }
+        } 
 
         return {
             id:user._id.toString(),
             email:user.email
         }
             
-        } catch (error) {
+        } catch (error:any) {
             console.error("Login  error:", error);
-            throw new Error("something went wrong")
+            throw new Error(error)
         }
     }
   })

@@ -1,16 +1,39 @@
 "use client"
 
+import { log } from "console";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 
 function Login() {
+  const router=useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const submitHandler=(e:React.FormEvent<HTMLElement>)=>{
-   
+  const submitHandler=async(e:React.FormEvent<HTMLElement>)=>{
+   console.log(email,password)
     e.preventDefault();
-    console.log(email,password)
+    try {
+      const result=await signIn("credentials",{
+        email,
+        password,
+        redirect:false
+      })
+
+      if(result?.error){
+        throw new Error(result.error)
+      }else{
+
+        toast.success("login successfull")
+        router.push("/")
+      }
+    } catch (error:any) {
+      console.error("Login error:", error);
+      toast.error(error.message)
+    }
+
 
 
   }
@@ -58,7 +81,7 @@ function Login() {
           </div>
           <button
            
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+            className="w-full cursor-pointer bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
           >
             Login
           </button>

@@ -1,16 +1,37 @@
 "use client"
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 
 function Signup() {
+    const router=useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const submitHandler=(e:any)=>{
+  const submitHandler=async(e:React.FormEvent<HTMLElement>)=>{
    
-    e.preventDefault();
-    console.log(email,password)
+  e.preventDefault();
+    try {
+      const res=await fetch("http://localhost:3000/api/auth",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({email,password})
+      })
+      
+      const data=await res.json();
+      if(!res.ok){
+        toast.error("Registation failed")
+        throw new Error(data.error ||"Registation failed")
+      }
+      toast.success("Registation successfull")
+      router.push("/login")
+      
+    } catch (error) {
+      console.error("Login error:", error);
+      
+    }
 
 
   }
@@ -18,7 +39,7 @@ function Signup() {
        <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="w-full max-w-md p-8 bg-white rounded-2xl shadow-lg">
         <h2 className="text-2xl font-bold text-center mb-6">Signup to Your Account</h2>
-        <form className="space-y-4" onSubmit={(e)=>submitHandler(e)}>
+        <form className="space-y-4" onSubmit={submitHandler}>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="email">
               Email
@@ -58,7 +79,7 @@ function Signup() {
           </div>
           <button
            
-            className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
+            className="w-full cursor-pointer bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition"
           >
             Signup
           </button>
