@@ -1,9 +1,15 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 import { dbConnect } from "./dbConnect";
 import User from "@/models/User";
 
+
+
+
 export const authOption:NextAuthOptions={
+
+
     providers: [
   CredentialsProvider({
     name: "Credentials",
@@ -34,9 +40,39 @@ export const authOption:NextAuthOptions={
             throw new Error(error)
         }
     }
-  })
+  }),
+
+     GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
 ],
 callbacks: {
+
+  async signIn({ user, account }) {
+    console.log("signIn:", user, account);
+    if (account?.provider === "google") {
+      await dbConnect();
+      const existingUser = await User.findOne({ email: user.email });
+      if (!existingUser) {
+        const newUser = await User.create({
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          provider: "google",
+          id:user.id,
+          accessToken:account.access_token
+          
+        });
+        
+        console.log("✅ New user stored from Google:", newUser);
+      } else {
+        console.log("🟡 User already exists:", existingUser.email);
+      }
+    }
+    return true; 
+  },
+
   async jwt({ token, user }) {
     if (user) {
       token.id = user.id;

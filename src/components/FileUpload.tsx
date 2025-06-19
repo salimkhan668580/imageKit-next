@@ -6,12 +6,27 @@ import {
     ImageKitUploadNetworkError,
     upload,
 } from "@imagekit/next";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 const FileUpload = () => {
+   const {data:session,status}=useSession();
+
+  if(!session){
+
+  return <div className='text-white  flex flex-col  items-center justify-center h-[400px] '>
+    <p className='text-xl '>Please login first</p>
+
+    <Link href="/login" className="btn border  px-6 py-2 rounded my-2 font-semibold">Login</Link>
+
+  </div>
+}
+
+const [isUploading, setIsUploading] = useState(false);
     const router=useRouter()
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -80,6 +95,7 @@ const FileUpload = () => {
         }
         const { signature, expire, token, publicKey } = authParams;
         try {
+        setIsUploading(true);
             const uploadResponse = await upload({
 
                 expire,
@@ -131,6 +147,8 @@ const FileUpload = () => {
                toast.error(error)
                 console.error("Upload error:", error);
             }
+        }finally{
+            setIsUploading(false)
         }
     };
 
@@ -170,13 +188,14 @@ const FileUpload = () => {
     </div>
 
     {/* File Input */}
-    <div>
+    <div className="cursor-pointer">
       <label className="block mb-1 text-sm font-medium">Select Video File</label>
       <input
       accept="video/*"
         type="file"
         ref={fileInputRef}
-        className="block w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4
+
+        className="block w-full cursor-pointer text-sm text-gray-300 file:mr-4 file:py-2 file:px-4
           file:rounded-full file:border-0
           file:text-sm file:font-semibold
           file:bg-indigo-600 file:text-white
@@ -185,13 +204,16 @@ const FileUpload = () => {
     </div>
 
     {/* Upload Button */}
-    <button
-      type="button"
-      onClick={handleUpload}
-      className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
-    >
-      🚀 Upload Video
-    </button>
+   <button
+  type="button"
+  disabled={isUploading}
+  onClick={handleUpload}
+  className={`w-full font-semibold py-2 px-4 rounded-lg  transition duration-200
+    ${isUploading ? 'bg-gray-500 cursor-not-allowed' : 'bg-indigo-600 cursor-pointer hover:bg-indigo-500 text-white'}
+  `}
+>
+  🚀 {isUploading ? 'Uploading...' : 'Upload Video'}
+</button>
 
     {/* Upload Progress */}
     <div className="text-sm">
@@ -202,7 +224,7 @@ const FileUpload = () => {
         className="w-full h-2 rounded bg-gray-700 [&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg [&::-webkit-progress-value]:bg-indigo-500"
       ></progress>
       <div className="mt-1 text-right text-xs text-gray-400">
-        {progress}% complete
+        {Math.floor(progress)}% complete
       </div>
     </div>
   </div>
