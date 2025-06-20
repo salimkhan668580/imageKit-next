@@ -26,7 +26,7 @@ export default function EditProfile() {
       setEmail(data.getUser.email || '');
     };
     fetchUserData();
-  }, []);
+  }, [session?.user.email]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +40,7 @@ export default function EditProfile() {
     const result = await res.json();
     if(!res.ok) return toast.error(result.error);
     toast.success(result.message);
-    console.log('Updated:', result);
+
 
   };
 

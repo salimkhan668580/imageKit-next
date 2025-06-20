@@ -3,9 +3,13 @@
 
 import { useSession ,signOut } from "next-auth/react"
 import Link from "next/link"
+import { usePathname } from "next/navigation";
+
 
 
  function Header() {
+  const pathname = usePathname();
+
   
   const { data: session, status } = useSession();
 
@@ -16,17 +20,19 @@ import Link from "next/link"
     <div className="flex justify-between items-center h-16">
       
       {/* Logo or Title */}
-      <div className="text-xl font-bold text-white">
+      <div className="text-xl cursor-pointer font-bold text-white">
+        <Link href="/">
         🎥 VideoUploader
+        </Link>
       </div>
 
       {/* Navigation */}
       <nav className="space-x-6">
-        <Link href="/" className="text-gray-300 hover:text-white transition">Home</Link>
+        <Link href="/" className={`text-gray-300 hover:text-white transition ${pathname === "/" ? "underline" : ""}`}>Home</Link>
         {session &&
         <>
-          <Link href="/upload" className="text-gray-300 hover:text-white transition">Upload</Link>
-          <Link href="/profile" className="text-gray-300 hover:text-white transition">Profile</Link>
+          <Link href="/upload" className={`text-gray-300 hover:text-white transition ${pathname === "/upload" ? "underline" : ""}`}>Upload</Link>
+          <Link href="/profile" className={`text-gray-300 hover:text-white transition ${pathname === "/profile" ? "underline" : ""}`}>Profile</Link>
         </>
           
         
@@ -36,7 +42,7 @@ import Link from "next/link"
             Logout
           </button>
         ) : (
-          <Link href="/login" className="text-green-400 hover:text-green-300">Login</Link>
+          <Link href="/login" className={`text-green-400 hover:text-green-300 transition ${pathname === "/login" ? "underline" : ""}`}>Login</Link>
         )}
       </nav>
     </div>

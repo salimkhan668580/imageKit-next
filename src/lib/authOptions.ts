@@ -35,10 +35,15 @@ export const authOption:NextAuthOptions={
             email:user.email
         }
             
-        } catch (error:any) {
-            console.error("Login  error:", error);
-            throw new Error(error)
-        }
+        }catch (error: unknown) {
+  console.error("Login error:", error);
+
+  if (error instanceof Error) {
+    throw new Error(error.message); // rethrow with original message
+  } else {
+    throw new Error("An unexpected error occurred");
+  }
+}
     }
   }),
 

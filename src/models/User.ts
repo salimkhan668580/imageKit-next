@@ -1,7 +1,7 @@
 
 import bcrypt from "bcryptjs";
-import mongoose, { Schema } from "mongoose";
-import Document from "next/document";
+import mongoose, { Schema,Document } from "mongoose";
+
 
 export interface IUser extends Document {
     email: string;

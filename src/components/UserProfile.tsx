@@ -3,6 +3,7 @@
 import { Session } from 'next-auth';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 
@@ -28,7 +29,7 @@ export default function UserProfile() {
 
   async function getUser(session:Session){
     try {
-      const res = await fetch(`http://localhost:3000/api/user`,{
+      const res = await fetch(`/api/user`,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body: JSON.stringify({ email: session?.user.email })
@@ -80,7 +81,9 @@ export default function UserProfile() {
         {/* Actions */}
         <div className="mt-6 flex justify-between">
           <button className="bg-indigo-600 cursor-pointer hover:bg-indigo-500 px-4 py-2 rounded-lg font-semibold">
+            <Link href="/edit">
             Edit Profile
+            </Link>
           </button>
           <button onClick={() => signOut({ callbackUrl: '/login' })} className="bg-red-600 cursor-pointer hover:bg-red-500 px-4 py-2 rounded-lg font-semibold">
             Logout

@@ -14,17 +14,9 @@ import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 const FileUpload = () => {
-   const {data:session,status}=useSession();
+   const {data:session}=useSession();
 
-  if(!session){
 
-  return <div className='text-white  flex flex-col  items-center justify-center h-[400px] '>
-    <p className='text-xl '>Please login first</p>
-
-    <Link href="/login" className="btn border  px-6 py-2 rounded my-2 font-semibold">Login</Link>
-
-  </div>
-}
 
 const [isUploading, setIsUploading] = useState(false);
     const router=useRouter()
@@ -45,11 +37,24 @@ const [isUploading, setIsUploading] = useState(false);
      *
      * @returns {Promise<{signature: string, expire: string, token: string, publicKey: string}>} The authentication parameters.
      * @throws {Error}
+     * 
+     * 
      */
+
+
+      if(!session){
+
+  return <div className='text-white  flex flex-col  items-center justify-center h-[400px] '>
+    <p className='text-xl '>Please login first</p>
+
+    <Link href="/login" className="btn border  px-6 py-2 rounded my-2 font-semibold">Login</Link>
+
+  </div>
+}
     const authenticator = async () => {
         try {
 
-            const response = await fetch("http://localhost:3000/api/upload-auth",{
+            const response = await fetch("/api/upload-auth",{
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -111,7 +116,7 @@ const [isUploading, setIsUploading] = useState(false);
                 abortSignal: abortController.signal,
             });
 
-          const uploadSuccess=  await fetch("http://localhost:3000/api/video", {
+          const uploadSuccess=  await fetch("/api/video", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -133,7 +138,7 @@ const [isUploading, setIsUploading] = useState(false);
             }
             router.push("/")
             console.log("Upload response:", uploadResponse);
-        } catch (error:any) {
+        } catch (error:unknown) {
            
             if (error instanceof ImageKitAbortError) {
                 console.error("Upload aborted:", error.reason);
@@ -144,7 +149,7 @@ const [isUploading, setIsUploading] = useState(false);
             } else if (error instanceof ImageKitServerError) {
                 console.error("Server error:", error.message);
             } else {
-               toast.error(error)
+               toast.error(error instanceof Error ? error.message : "Something went wrong");
                 console.error("Upload error:", error);
             }
         }finally{

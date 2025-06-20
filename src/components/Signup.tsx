@@ -22,7 +22,7 @@ function Signup() {
         toast.error("email or password is missing")
         return
       }
-      const res=await fetch("http://localhost:3000/api/auth",{
+      const res=await fetch("/api/auth",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({email,password})
@@ -51,7 +51,7 @@ function Signup() {
     }
    
 
-  }, [status]);
+  }, [status,session, router]);
 
 
   return (

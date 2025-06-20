@@ -1,13 +1,11 @@
 import { authOption } from '@/lib/authOptions';
 import { dbConnect } from '@/lib/dbConnect';
 import Video, { IVideo } from "@/models/Video";
-import { log } from 'console';
-import next from 'next';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse as res} from "next/server";
 
 
-export const GET = async (req: NextRequest) => {
+export const GET = async () => {
     try {
         await dbConnect();
         const video= await Video.find({}).sort({createdAt:-1});

@@ -1,6 +1,5 @@
 "use client"
 
-import { log } from "console";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -35,10 +34,16 @@ function Login() {
         toast.success("login successfull")
         router.push("/")
       }
-    } catch (error:any) {
-      console.error("Login error:", error);
-      toast.error(error.message)
-    }
+    }catch (error: unknown) {
+  if (error instanceof Error) {
+    console.error("Login error:", error.message);
+    toast.error(error.message);
+  } else {
+    console.error("Unknown error:", error);
+    toast.error("Something went wrong");
+  }
+}
+
 
 
 
@@ -49,7 +54,7 @@ function Login() {
       router.push("/")
       return;
     }
-  },[])
+  },[session, router])
   return (
    <div className="flex items-center justify-center min-h-screen bg-gray-950">
   <div className="w-full max-w-md p-8 bg-gray-900 rounded-2xl shadow-lg border border-gray-700">
@@ -113,7 +118,7 @@ function Login() {
             </button>
 
     <p className="text-center text-sm text-gray-400 mt-4">
-      Don't have an account?{" "}
+     Don&apos;t have an account?{" "}
       <Link href="/signup" className="text-indigo-400 hover:underline">
         Sign up
       </Link>
