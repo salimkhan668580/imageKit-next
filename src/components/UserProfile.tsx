@@ -1,19 +1,31 @@
 'use client';
 
 import { Session } from 'next-auth';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
+
+export interface IUserData {
+  email: string;
+  name?: string;
+  image?: string;
+  provider?: string;
+  createdAt?: string;
+}
+
 export default function UserProfile() {
   const { data: session } = useSession()
-  const [user, setUser] = useState<{}>({})
+  const [user, setUser] = useState<IUserData|null>(null)
+
+  
 
   useEffect(() => {
  if (session) {
       getUser(session);
     }
   }, [session]);
+
   async function getUser(session:Session){
     try {
       const res = await fetch(`http://localhost:3000/api/user`,{
@@ -36,7 +48,7 @@ export default function UserProfile() {
         {/* Profile Picture */}
         <div className="flex flex-col items-center text-center">
           <Image
-            src={user?.image}
+            src={user?.image||'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'}
             alt="Profile"
             width={100}
             height={100}
@@ -56,21 +68,21 @@ export default function UserProfile() {
           <div>
             <label className="block text-sm text-gray-400">Joined</label>
             <p className="text-lg">
-              {new Date(user?.createdAt).toLocaleDateString('en-IN', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
+             {user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-IN', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }) : 'N/A'}
             </p>
           </div>
         </div>
 
         {/* Actions */}
         <div className="mt-6 flex justify-between">
-          <button className="bg-indigo-600 hover:bg-indigo-500 px-4 py-2 rounded-lg font-semibold">
+          <button className="bg-indigo-600 cursor-pointer hover:bg-indigo-500 px-4 py-2 rounded-lg font-semibold">
             Edit Profile
           </button>
-          <button className="bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg font-semibold">
+          <button onClick={() => signOut({ callbackUrl: '/login' })} className="bg-red-600 cursor-pointer hover:bg-red-500 px-4 py-2 rounded-lg font-semibold">
             Logout
           </button>
         </div>

@@ -45,11 +45,12 @@ function Signup() {
   }
 
    useEffect(() => {
-   
-    if (status === "authenticated") {
-      toast.success("Google login successful ✨");
-      router.replace("/");
+    if(session){
+     router.replace("/")
+     return
     }
+   
+
   }, [status]);
 
 

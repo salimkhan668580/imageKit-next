@@ -1,15 +1,17 @@
 "use client"
 
 import { log } from "console";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
 
 
 function Login() {
   const router=useRouter();
+    const { data: session } = useSession();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const submitHandler=async(e:React.FormEvent<HTMLElement>)=>{
@@ -41,6 +43,13 @@ function Login() {
 
 
   }
+  
+  useEffect(() => {
+    if(session){
+      router.push("/")
+      return;
+    }
+  },[])
   return (
    <div className="flex items-center justify-center min-h-screen bg-gray-950">
   <div className="w-full max-w-md p-8 bg-gray-900 rounded-2xl shadow-lg border border-gray-700">
@@ -94,6 +103,14 @@ function Login() {
         Login
       </button>
     </form>
+
+      <button
+            onClick={() => signIn('google', { callbackUrl: '/' })}
+              className="mt-6 w-full cursor-pointer flex items-center justify-center gap-3 bg-white text-black font-medium py-2 rounded-lg hover:bg-gray-200 transition"
+            >
+              <FcGoogle size={20} />
+              Sign in with Google
+            </button>
 
     <p className="text-center text-sm text-gray-400 mt-4">
       Don't have an account?{" "}
