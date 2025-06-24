@@ -3,6 +3,7 @@
 import { IVideo } from '@/models/Video';
 import { Video } from '@imagekit/next';
 import React, { useEffect, useState } from 'react';
+import { ClipLoader } from "react-spinners";
 
 interface IVideoResponse {
   video: IVideo[];
@@ -10,15 +11,35 @@ interface IVideoResponse {
 
 function Home() {
   const [allData, setAllData] = useState<IVideoResponse | null>(null);
+    let [loading, setLoading] = useState(false);
+  let [color, setColor] = useState("#ffffff");
+
 
   useEffect(() => {
     getvideoData();
   }, []);
 
   async function getvideoData() {
-    const data = await fetch('/api/video');
+    try {
+    setLoading(true);
+       const data = await fetch('/api/video');
     const orignal = await data.json();
     setAllData(orignal);
+    } catch (error) {
+      console.error("Error fetching video data:", error);
+      
+    }finally{
+      setLoading(false);
+    }
+   
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-[400px]">
+        <ClipLoader color={color} loading={loading} size={50} />
+      </div>
+    );
   }
 
   if (!allData?.video?.length) {
@@ -28,6 +49,8 @@ function Home() {
       </div>
     );
   }
+
+
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 px-3 gap-0">

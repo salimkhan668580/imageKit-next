@@ -11,7 +11,7 @@ function Provider({children,session}:{children:React.ReactNode,session:Session|n
    <SessionProvider session={session} refetchInterval={5*60}>
     <ImageKitProvider urlEndpoint={urlEndpoint}>
        <Header />
-  <main className="pt-16">
+  <main className=" pt-16 min-h-[calc(100vh-64px)]">
     {children}
   </main>
     </ImageKitProvider>

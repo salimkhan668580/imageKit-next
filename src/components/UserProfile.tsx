@@ -5,6 +5,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 
 
 export interface IUserData {
@@ -17,6 +18,7 @@ export interface IUserData {
 
 export default function UserProfile() {
   const { data: session } = useSession()
+  const [loading, setLoading] = useState<boolean>(false);
   const [user, setUser] = useState<IUserData|null>(null)
 
   
@@ -29,6 +31,7 @@ export default function UserProfile() {
 
   async function getUser(session:Session){
     try {
+      setLoading(true);
       const res = await fetch(`/api/user`,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
@@ -39,7 +42,16 @@ export default function UserProfile() {
       console.log("user data",data);
     } catch (error) {
       console.error('Error fetching user:', error);
+    }finally {
+      setLoading(false);
     }
+  }
+  if(loading) {
+    return (
+    <div className="flex items-center justify-center h-[400px]">
+           <ClipLoader  loading={loading} size={50} />
+    </div>
+    );
   }
 
   return (

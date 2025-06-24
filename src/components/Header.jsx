@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation";
 
   
   return (
-    <header className="fixed top-0 left-0 w-full bg-gray-900 border-b border-gray-800 z-50 shadow-md">
+    <header className="fixed top-0 h-16 left-0 w-full bg-gray-900 border-b border-gray-800 z-50 shadow-md">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div className="flex justify-between items-center h-16">
       
@@ -38,7 +38,7 @@ import { usePathname } from "next/navigation";
         
         }
         {session ? (
-          <button onClick={() => signOut()} className="text-red-400 cursor-pointer hover:text-red-300">
+          <button onClick={() => signOut({ callbackUrl: "/" })} className="text-red-400 cursor-pointer hover:text-red-300">
             Logout
           </button>
         ) : (
