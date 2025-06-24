@@ -11,8 +11,8 @@ interface IVideoResponse {
 
 function Home() {
   const [allData, setAllData] = useState<IVideoResponse | null>(null);
-    let [loading, setLoading] = useState(false);
-  let [color, setColor] = useState("#ffffff");
+  const [loading, setLoading] = useState(false);
+
 
 
   useEffect(() => {
@@ -37,7 +37,7 @@ function Home() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-[400px]">
-        <ClipLoader color={color} loading={loading} size={50} />
+        <ClipLoader  loading={loading} size={50} />
       </div>
     );
   }

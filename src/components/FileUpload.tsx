@@ -10,12 +10,9 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Typewriter from 'typewriter-effect';
 import { LuSearchCode } from "react-icons/lu";
-
-import { useRouter } from 'next/navigation';
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { IoIosCopy } from "react-icons/io";
-import ReactMarkdown from "react-markdown";
 import { CiSquareRemove } from "react-icons/ci";
 
 
@@ -28,8 +25,6 @@ const [loading,setLoading] = useState<boolean>(false);
 
 
 const [isUploading, setIsUploading] = useState(false);
-    const router=useRouter()
-    
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
 
