@@ -33,8 +33,23 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 export const POST=async(req:NextRequest)=>{
     const {prompt}=await req.json()
    try {
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-    const result = await model.generateContent(prompt);
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash",
+       
+      });
+    // const result = await model.generateContent(prompt);
+  const chat = model.startChat({
+   systemInstruction: {
+    role: "system", 
+    parts: [
+      {
+        text:
+          "Your name is Salim Khan. You are a helpful assistant that generates engaging YouTube video titles and descriptions based on the prompt provided. Keep the tone creative and concise.",
+      },
+    ],
+  },
+});
+const result = await chat.sendMessage(prompt);
     const response = await result.response;
 
     const text = response.text();
