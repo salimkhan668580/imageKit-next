@@ -299,11 +299,17 @@ const [isUploading, setIsUploading] = useState(false);
        <div className="relative w-full">
         
   {/* Copy Button */}
-  <div className="flex">
+
+  {/* Output Box */}
+  <div
+    id="output"
+    className="w-full h-[300px] overflow-y-auto custom-scroll p-4 bg-gray-700 text-white rounded-lg border border-gray-600 whitespace-pre-wrap"
+  >
+      <div className="flex  rounded-lg relative  justify-end items-center">
 
   <button
     onClick={()=>setResponseData("")}
-    className="absolute top-2 mx-10 cursor-pointer right-2 bg-gray-600 hover:bg-gray-500 text-white text-sm px-2 py-1 rounded-md transition"
+    className=" mx-2 cursor-pointer  bg-gray-600 hover:bg-gray-500 text-white text-sm px-2 py-1 rounded-md transition"
   >
 
   <CiSquareRemove  />
@@ -317,17 +323,13 @@ const [isUploading, setIsUploading] = useState(false);
         toast.success("✅ Copied to clipboard!");
       }
     }}
-    className="absolute top-2 cursor-pointer right-2 bg-gray-600 hover:bg-gray-500 text-white text-sm px-2 py-1 rounded-md transition"
+    className=" cursor-pointer  bg-gray-600 hover:bg-gray-500 text-white text-sm px-2 py-1 rounded-md transition"
   >
 
     <IoIosCopy />
   </button>
+
   </div>
-  {/* Output Box */}
-  <div
-    id="output"
-    className="w-full h-[300px] overflow-y-auto custom-scroll p-4 bg-gray-700 text-white rounded-lg border border-gray-600 whitespace-pre-wrap"
-  >
     {loading ? (
       "Generating response..."
     ) : responseData ? (

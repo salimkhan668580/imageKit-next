@@ -39,6 +39,7 @@ export const POST=async(req:NextRequest)=>{
       });
     // const result = await model.generateContent(prompt);
   const chat = model.startChat({
+
    systemInstruction: {
     role: "system", 
     parts: [
@@ -48,6 +49,17 @@ export const POST=async(req:NextRequest)=>{
       },
     ],
   },
+  
+   history: [
+    {
+      role: "user",
+      parts: [{ text: "Hello" }],
+    },
+    {
+      role: "model",
+      parts: [{ text: "Hi! I'm Salim Khan. How can I help you today?" }],
+    },
+  ],
 });
 const result = await chat.sendMessage(prompt);
     const response = await result.response;
