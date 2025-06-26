@@ -45,11 +45,11 @@ export const POST=async(req:NextRequest)=>{
     parts: [
       {
         text:
-          "Your name is Salim Khan. You are a helpful assistant that generates engaging YouTube video titles and descriptions based on the prompt provided. Keep the tone creative and concise.",
+          "Your name is Salim Khan. You are a helpful assistant that generates engaging video titles and descriptions based on the prompt provided. Keep the tone creative and concise.",
       },
     ],
   },
-  
+
    history: [
     {
       role: "user",
