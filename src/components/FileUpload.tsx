@@ -188,7 +188,7 @@ const [isUploading, setIsUploading] = useState(false);
       } catch (error) {
         console.error("Error generating response:", error);
       }finally{
-        setPromptData("");
+  
         setLoading(false);
       }
     }

@@ -14,7 +14,7 @@ function Signup() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // 👁 Toggle state
+  const [showPassword, setShowPassword] = useState(false); 
 
   const submitHandler = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
@@ -98,7 +98,7 @@ function Signup() {
             </button>
           </div>
 
-          {/* Remember Me */}
+       
           <div className="flex items-center justify-between">
             <label className="flex items-center text-sm text-gray-400">
               <input type="checkbox" className="mr-2" />
